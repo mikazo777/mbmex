@@ -1,0 +1,49 @@
+#ifndef __CHANGE_EVENT_HPP__
+#define __CHANGE_EVENT_HPP__
+#include <errno.h>
+#include <fcntl.h>
+#include <linux/input.h>
+#include <linux/uinput.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include "debug.hpp"
+
+
+#define UINPUTPATH "/dev/uinput"
+using namespace std;
+typedef struct {
+    const char *pTargetDeviceName;
+    int targetOpeNum;
+    int changeEventNum;
+} TARGET_TBL_T;
+
+
+class changeEvent {
+public:
+    bool changeEventSts;
+    changeEvent(const char *pInputPath);
+    ~changeEvent();
+    int changeEventTask(void);
+	int searchDeviceList(char *pDeviceName);
+	static void *planchThread(void *pParam) {
+	    reinterpret_cast<changeEvent*>(pParam)->changeEventTask();
+    	pthread_exit(NULL);
+	};
+private:
+    int targetEvent;    // target change event num
+    int inputFd;        // input fd
+    int outputFd;       // output fd
+    int outEvent;       // change event num
+    int createOutputDvRet;  // 
+	char deviceName[UINPUT_MAX_NAME_SIZE];
+
+    int createOutputDevice(int createFd, const char *pInputDevName);
+    int changeOperation(__u16 inputEventType);
+    int writeChangeEvent(int setEventType, int eventCode, int setValue);
+};
+#endif //__CHANGE_EVENT_HPP__
+int checkEventDevice(const struct dirent *pDir);
