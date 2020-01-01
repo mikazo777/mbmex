@@ -1,0 +1,9 @@
+[Unit]
+Description=Many Button Mouse Extend
+
+[install]
+WantedBy=multi-user.target
+
+[Service]
+ExecStart=/usr/bin/mbmex
+Restart=always
