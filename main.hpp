@@ -1,6 +1,6 @@
-#ifndef __MBMEX_MAIN_HPP__
-#define __MBMEX_MAIN_HPP__
+#ifndef MBMEX_MAIN_HPP_
+#define MBMEX_MAIN_HPP_
 #include <dirent.h>
 #define DEV_INPUT_DIR "/dev/input/"
 
-#endif	// __MBMEX_MAIN_HPP__
+#endif	// MBMEX_MAIN_HPP
