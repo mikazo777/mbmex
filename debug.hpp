@@ -2,7 +2,7 @@
 #define DEBUG_HPP
 #include <iostream>
 
-//#define __MMCI_DEBUG_ON__
+//#define MBMEX_DEBUG_ON
 using namespace std;
 void debugPrint(string str);
 void tracePrint(string str);
