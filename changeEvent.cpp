@@ -50,12 +50,12 @@ changeEvent::changeEvent(const char *pInputPath) {
 		}
 	}
 	if (false == changeEventSts) {
-#ifdef MMCI_DEBUG_ON
+#ifdef MBMEX_DEBUG_ON
 		cout << "pInputPath = " << pInputPath << endl;
 		cout << "inputFd =" << inputFd << endl;
 		cout << "outputFd =" << outputFd << endl;
 		cout << "createOutputDvRet =" << createOutputDvRet << endl;
-#endif
+#endif //MBMEX_DEBUG_ON
 	}
 	tracePrint("changeEvent::changeEvent end");
 }
@@ -91,7 +91,7 @@ int changeEvent::changeEventTask(void) {
 			cout << "targetEvent = " << targetEvent << endl;
 			cout << "inputEvent.code = " << inputEvent.code << endl;
 			cout << "inputEvent.value = " << inputEvent.value << endl;
-#endif // MMCI_DEBUG_ON
+#endif // MBMEX_DEBUG_ON
 		}
 	}
 	changeEventSts = false;
