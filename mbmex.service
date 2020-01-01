@@ -5,5 +5,5 @@ Description=Many Button Mouse Extend
 WantedBy=multi-user.target
 
 [Service]
-ExecStart=/usr/bin/mbmex
+ExecStart=/usr/local/bin/mbmex
 Restart=always
