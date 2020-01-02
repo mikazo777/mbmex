@@ -13,7 +13,7 @@ target_link_libraries(mbmex Threads::Threads)
 
 
 INSTALL(TARGETS mbmex RUNTIME DESTINATION bin)
-INSTALL(FILES mbmex.service DESTINATION /etc/systemd/system/)
+INSTALL(FILES mbmex.service DESTINATION /lib/systemd/system/)
 
 #set(CMAKE_CXX_FLAGS "-g -O0 -Wall -fprofile-arcs -ftest-coverage")
 #set(CMAKE_C_OUTPUT_EXTENSION_REPLACE ON)
