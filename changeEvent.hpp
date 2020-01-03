@@ -45,5 +45,5 @@ private:
     int changeOperation(__u16 inputEventType);
     int writeChangeEvent(int setEventType, int eventCode, int setValue);
 };
-#endif //CHANGE_EVENT_HPP
 int checkEventDevice(const struct dirent *pDir);
+#endif //CHANGE_EVENT_HPP
