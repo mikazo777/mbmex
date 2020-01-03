@@ -4,7 +4,7 @@
 #include "changeEvent.hpp"
 #include <linux/input.h>
 #include "main.hpp"
-#include <sys/epoll.h>
+//#include <sys/epoll.h>
 #include <pthread.h>
 using namespace std;
 
