@@ -29,7 +29,7 @@ int main(void) {
 
             printf("filename = %s\n", filename);
 			pChgEvt[chgEvtCnt] = new changeEvent(filename);
-			if (NULL != pChgEvt[chgEvtCnt]) {
+			if (nullptr != pChgEvt[chgEvtCnt]) {
 				if (false == pChgEvt[chgEvtCnt]->changeEventSts) {
 					delete pChgEvt[chgEvtCnt];
 				} else {
@@ -40,11 +40,11 @@ int main(void) {
 		pthread_t handle;  // Thread handle
 		for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
 			retValue = pthread_create(&handle,
-									  NULL,
+									  nullptr,
 									  changeEvent::planchThread,
 									  pChgEvt[lpCnt]);
 		}
-		pthread_join(handle, NULL);
+		pthread_join(handle, nullptr);
 	}
 	return retValue;
 }

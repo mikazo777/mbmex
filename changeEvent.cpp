@@ -13,14 +13,14 @@ TARGET_TBL_T targetDevNameTable[] = {
 	{ "MX Master 2S Keyboard",0x001D, BTN_TASK },
 	{ "MX Master 2S Keyboard",0x000F, 0x0000 },
 	{ "MX Master 2S Keyboard",0x0038, 0x0000 },
-	{ NULL, 0x0000, 0x0000 }
+	{ nullptr, 0x0000, 0x0000 }
 };
 
 changeEvent::changeEvent(const char *pInputPath) {
 	tracePrint("changeEvent::changeEvent start");
 	int retValue = -1;
 	memset(deviceName, 0x00, sizeof(deviceName));
-	if (NULL != pInputPath) {
+	if (nullptr != pInputPath) {
 		inputFd = open(pInputPath, O_RDWR);
 		if (0 <= inputFd) {
 			retValue = ioctl(inputFd, EVIOCGNAME(sizeof(deviceName)), deviceName);
@@ -140,7 +140,7 @@ int changeEvent::createOutputDevice(int createFd, const char *pInputDevName) {
 	int retValue = -1;
 	errno = 0;
 	tracePrint("changeEvent::createOutputDevice start");
-	if (NULL != pInputDevName) {
+	if (nullptr != pInputDevName) {
 		ioctl(createFd, UI_SET_EVBIT, EV_KEY);
 		ioctl(createFd, UI_SET_KEYBIT, outEvent);
 
@@ -171,7 +171,7 @@ int changeEvent::searchDeviceList(char *pDeviceName) {
     int loopCnt = 0;
     bool retValue = -1;
 	size_t checkLen = 0;
-    for (loopCnt = 0; targetDevNameTable[loopCnt].pTargetDeviceName != NULL; loopCnt++ ) {
+    for (loopCnt = 0; targetDevNameTable[loopCnt].pTargetDeviceName != nullptr; loopCnt++ ) {
 		checkLen = strnlen(targetDevNameTable[loopCnt].pTargetDeviceName, UINPUT_MAX_NAME_SIZE);
         retValue = strncmp(pDeviceName, 
 						   targetDevNameTable[loopCnt].pTargetDeviceName,
