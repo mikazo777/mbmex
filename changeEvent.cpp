@@ -71,7 +71,7 @@ int changeEvent::changeEventTask(void) {
 	cout << "DeviceName = " << deviceName << endl;
 	while(true) {
 		readResult = read(inputFd, &inputEvent, sizeof(inputEvent));
-		if (readResult == -1) {
+		if (-1 == readResult) {
 			debugPrint("read error do stop");
 			break;
 		} else if (readResult != sizeof(inputEvent)) {
