@@ -1,4 +1,5 @@
 #include <iostream>
+#include "debug.hpp"
 using namespace std;
 
 void debugPrint(string str) {
