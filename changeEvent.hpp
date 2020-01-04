@@ -17,6 +17,7 @@
 using namespace std;
 typedef struct {
     const char *pTargetDeviceName;
+	const int detailDeviceType;
     int targetOpeNum;
     int changeEventNum;
 } TARGET_TBL_T;
@@ -28,7 +29,7 @@ public:
     changeEvent(const char *pInputPath);
     ~changeEvent();
     int changeEventTask(void);
-	int searchDeviceList(char *pDeviceName);
+	int searchDeviceList(char *pDeviceName, struct input_id &pInputId);
 	static void *planchThread(void *pParam) {
 	    reinterpret_cast<changeEvent*>(pParam)->changeEventTask();
     	pthread_exit(NULL);
@@ -40,6 +41,7 @@ private:
     int outEvent;       // change event num
     int createOutputDvRet;  // 
 	char deviceName[UINPUT_MAX_NAME_SIZE];
+	struct input_id inputId;
 
     int createOutputDevice(int createFd, const char *pInputDevName);
     int changeOperation(__u16 inputEventType);
