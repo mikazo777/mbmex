@@ -6,13 +6,14 @@
 #include "main.hpp"
 //#include <sys/epoll.h>
 #include <pthread.h>
+#include "logitechMouseProduct.hpp"
 using namespace std;
 
 TARGET_TBL_T targetDevNameTable[] = {
-	{ "Logitech USB Receiver Consumer Control", 0x00D9, BTN_TASK },
-	{ "MX Master 2S Keyboard",0x001D, BTN_TASK },
-	{ "MX Master 2S Keyboard",0x000F, 0x0000 },
-	{ "MX Master 2S Keyboard",0x0038, 0x0000 },
+	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_1, 0x00D9, BTN_TASK },
+	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x001D, BTN_TASK },
+	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x000F, 0x0000 },
+	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x0038, 0x0000 },
 	{ nullptr, 0x0000, 0x0000 }
 };
 
@@ -25,22 +26,25 @@ changeEvent::changeEvent(const char *pInputPath) {
 		if (0 <= inputFd) {
 			retValue = ioctl(inputFd, EVIOCGNAME(sizeof(deviceName)), deviceName);
 			if (0 <= retValue) { 
-				retValue = searchDeviceList(deviceName);
-				if (0 == retValue) {
-					outputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-					if (-1 != outputFd) {
-						//outEvent = changeEventNum;
-						createOutputDvRet = createOutputDevice(outputFd, 
-															   deviceName);
-						ioctl(inputFd, EVIOCGRAB, 1);
-						if (createOutputDvRet != -1) {
-							changeEventSts = true;
-						} else {
-							close(outputFd);
+				retValue = ioctl(inputFd, EVIOCGID, &inputId);
+				if (0 <= retValue) { 
+					retValue = searchDeviceList(deviceName, inputId);
+					if (0 == retValue) {
+						outputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+						if (-1 != outputFd) {
+							//outEvent = changeEventNum;
+							createOutputDvRet = createOutputDevice(outputFd, 
+																   deviceName);
+							ioctl(inputFd, EVIOCGRAB, 1);
+							if (createOutputDvRet != -1) {
+								changeEventSts = true;
+							} else {
+								close(outputFd);
+							}
 						}
+					} else {
+						tracePrint("Target DeviceName was not found");
 					}
-				} else {
-					tracePrint("Target DeviceName was not found");
 				}
 			}
 			if (0 > retValue) {
@@ -167,7 +171,7 @@ int changeEvent::createOutputDevice(int createFd, const char *pInputDevName) {
 	return retValue;
 }
 
-int changeEvent::searchDeviceList(char *pDeviceName) {
+int changeEvent::searchDeviceList(char *pDeviceName, struct input_id &pInputId) {
     int loopCnt = 0;
     bool retValue = -1;
 	size_t checkLen = 0;
@@ -176,8 +180,10 @@ int changeEvent::searchDeviceList(char *pDeviceName) {
         retValue = strncmp(pDeviceName, 
 						   targetDevNameTable[loopCnt].pTargetDeviceName,
 						   checkLen);
-		if (0 == retValue) {
+		if ((0 == retValue) && (pInputId.product == targetDevNameTable[loopCnt].detailDeviceType)){
+//		if (0 == retValue) {
 			cout <<"match device name = "<< pDeviceName << endl;
+			cout <<" device.product = " << hex << pInputId.product << endl;
 			targetEvent = targetDevNameTable[loopCnt].targetOpeNum;
 			outEvent = targetDevNameTable[loopCnt].changeEventNum;
             break;
