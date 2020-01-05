@@ -196,6 +196,7 @@ int changeEvent::searchDeviceList(char *pDeviceName, struct input_id &pInputId) 
     }
     return retValue;
 }
+#if 0
 int checkEventDevice(const struct dirent *pDir) {
     int retValue = 0;
     if (0 == (strncmp("event", pDir->d_name, 5))) {
@@ -203,3 +204,4 @@ int checkEventDevice(const struct dirent *pDir) {
     }
     return retValue;
 }
+#endif
