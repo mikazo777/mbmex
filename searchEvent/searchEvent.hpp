@@ -26,11 +26,8 @@ public:
     	pthread_exit(NULL);
 	};
 protected:
-    int targetEvent;    // target change event num
     int inputFd;        // input fd
-    int outputFd;       // output fd
 	char deviceName[UINPUT_MAX_NAME_SIZE];
-	struct input_id inputId;
 
 };
 #endif //SEARCH_EVENT_HPP

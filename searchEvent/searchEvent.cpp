@@ -16,7 +16,6 @@ searchEvent::searchEvent(const char *pInputPath) {
 		if (0 <= inputFd) {
 			retValue = ioctl(inputFd, EVIOCGNAME(sizeof(deviceName)), deviceName);
 			if (0 <= retValue) { 
-				outputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
 				searchEventSts = true;
 			} else {
 				retValue = close(inputFd);
@@ -28,7 +27,6 @@ searchEvent::searchEvent(const char *pInputPath) {
 #ifdef MBMEX_DEBUG_ON
 		cout << "pInputPath = " << pInputPath << endl;
 		cout << "inputFd =" << inputFd << endl;
-		cout << "outputFd =" << outputFd << endl;
 #endif //MBMEX_DEBUG_ON
 	}
 	tracePrint("searchEvent::searchEvent end");
@@ -36,7 +34,6 @@ searchEvent::searchEvent(const char *pInputPath) {
 searchEvent::~searchEvent() {
 	ioctl(inputFd, EVIOCGRAB, 0);
 	close(inputFd);
-	close(outputFd);
 }
 
 int searchEvent::eventTask(void) {
