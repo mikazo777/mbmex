@@ -4,6 +4,7 @@ project(mbmex CXX)
 # set parameters
 set(CMAKE_CXX_STANDARD 11)
 set(SOURCES
+	mbmexBase.cpp
 	main.cpp
 	changeEvent.cpp
 	debug.cpp)

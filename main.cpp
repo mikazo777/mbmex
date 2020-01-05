@@ -2,6 +2,7 @@
 #include <cstring>
 #include <pthread.h>
 #include "main.hpp"
+#include "mbmexBase.hpp"
 #include "changeEvent.hpp"
 #include "debug.hpp"
 
@@ -47,12 +48,5 @@ int main(void) {
 		pthread_join(handle, nullptr);
 	}
 	return retValue;
-}
-int checkEventDevice(const struct dirent *pDir) {
-    int retValue = 0;
-    if (0 == (strncmp("event", pDir->d_name, 5))) {
-        retValue = 1;
-    }
-    return retValue;
 }
 
