@@ -6,9 +6,6 @@
 #include <linux/uinput.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include "../mbmexBase.hpp"
 #include "../debug.hpp"
