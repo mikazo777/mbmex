@@ -14,13 +14,22 @@ searchEvent::searchEvent(const char *pInputPath) {
 	if (nullptr != pInputPath) {
 		inputFd = open(pInputPath, O_RDWR);
 		if (0 <= inputFd) {
-			retValue = ioctl(inputFd, EVIOCGNAME(sizeof(deviceName)), deviceName);
-			if (0 <= retValue) { 
-				searchEventSts = true;
-			} else {
-				retValue = close(inputFd);
-				debugPrint("ioctl error");
-			}
+			retValue = ioctl(inputFd,
+							 EVIOCGNAME(sizeof(deviceName)),
+							 deviceName);
+		} else {
+			debugPrint("open error");
+		}
+		if (0 <= retValue) { 
+			retValue = ioctl(inputFd, EVIOCGID, &inputId);
+		} else {
+			debugPrint("ioctl error EVIOCGNAME");
+		}
+		if (0 <= retValue){ 
+			searchEventSts = true;
+		} else {
+			retValue = close(inputFd);
+			debugPrint("ioctl error EVIOCGID");
 		}
 	}
 	if (false == searchEventSts) {
@@ -50,16 +59,25 @@ int searchEvent::eventTask(void) {
             break;
         } else if ((EV_KEY == event.type) &&
                 (event.value == 1)) {
-        	cout << "deviceName" << deviceName << endl;
-        	cout << "inputEvent.type" << event.type << endl;
-        	cout << "InputEvent.code" << event.code << endl;
-        	cout << "inputEvent.value" << event.value << endl;
+			cout << "----------------------" << endl;
+        	cout << "deviceName-> " << endl;
+			cout << deviceName << endl;
+			cout << "deviceVendor->" << endl;
+			cout << "0x" << hex << inputId.vendor << endl;
+			cout << "deviceType->" << endl;
+			cout << "0x" << hex << inputId.product << endl;
+        	cout << "inputEvent.type->" << endl;
+			cout << "0x" << hex << event.type << endl;
+        	cout << "InputEvent.code->" << endl;
+			cout << "0x" << hex << event.code << endl;
+			cout << "----------------------" << endl;
         	fflush(stdout);
 		} else {
 			;
 		}
     }
     close(inputFd);
+	return readResult;
 }
 
 int main(void) {
