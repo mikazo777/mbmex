@@ -1,12 +1,10 @@
 #include <error.h>
 #include <iostream>
 #include <string.h>
-#include "changeEvent.hpp"
 #include <linux/input.h>
-#include "main.hpp"
-//#include <sys/epoll.h>
 #include <pthread.h>
 #include "logitechMouseProduct.hpp"
+#include "changeEvent.hpp"
 using namespace std;
 
 TARGET_TBL_T targetDevNameTable[] = {
@@ -26,38 +24,47 @@ TARGET_TBL_T targetDevNameTable[] = {
 changeEvent::changeEvent(const char *pInputPath) {
 	tracePrint("changeEvent::changeEvent start");
 	int retValue = -1;
+	outputFd = -1;
 	memset(deviceName, 0x00, sizeof(deviceName));
 	if (nullptr != pInputPath) {
 		inputFd = open(pInputPath, O_RDWR);
 		if (0 <= inputFd) {
 			retValue = ioctl(inputFd, EVIOCGNAME(sizeof(deviceName)), deviceName);
-			if (0 <= retValue) { 
-				retValue = ioctl(inputFd, EVIOCGID, &inputId);
-				if (0 <= retValue) { 
-					retValue = searchDeviceList(deviceName, inputId);
-					if (0 == retValue) {
-						outputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
-						if (-1 != outputFd) {
-							//outEvent = changeEventNum;
-							createOutputDvRet = createOutputDevice(outputFd, 
-																   deviceName);
-							ioctl(inputFd, EVIOCGRAB, 1);
-							if (createOutputDvRet != -1) {
-								changeEventSts = true;
-							} else {
-								close(outputFd);
-							}
-						}
-					} else {
-						tracePrint("Target DeviceName was not found");
-					}
-				}
-			}
-			if (0 > retValue) {
-				retValue = close(inputFd);
-				debugPrint("searchDeviceList between createOutputDevice error");
+		} else {
+			debugPrint("changeEvent::changeEvent checkpoint 1 error");
+		}
+		if (0 <= retValue) { 
+			retValue = ioctl(inputFd, EVIOCGID, &inputId);
+		} else {
+			debugPrint("changeEvent::changeEvent checkpoint 2 error");
+		}
+		if (0 <= retValue) { 
+			retValue = searchDeviceList(deviceName, inputId);
+		} else {
+			debugPrint("changeEvent::changeEvent checkpoint 3 error");
+		}
+		if (0 == retValue) {
+			outputFd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
+		} else {
+			tracePrint("Target DeviceName was not found");
+		}
+		if (-1 != outputFd) {
+			//outEvent = changeEventNum;
+			createOutputDvRet = createOutputDevice(outputFd, 
+												   deviceName);
+			ioctl(inputFd, EVIOCGRAB, 1);
+			if (createOutputDvRet != -1) {
+				changeEventSts = true;
+			} else {
+				close(outputFd);
 			}
 		}
+		if (0 > retValue) {
+			retValue = close(inputFd);
+			debugPrint("searchDeviceList between createOutputDevice error");
+		}
+	} else {
+		debugPrint("pInputPath = nullptr");
 	}
 	if (false == changeEventSts) {
 #ifdef MBMEX_DEBUG_ON
@@ -89,9 +96,9 @@ int changeEvent::changeEventTask(void) {
 			break;
 		} else if ((EV_KEY == inputEvent.type) && 
 				(targetEvent == inputEvent.code) && 
-				(inputEvent.value == 1)) {
+				(1 == inputEvent.value)) {
 			readResult = changeOperation(inputEvent.type);
-			if (readResult == -1) {
+			if (-1 == readResult) {
 				break;
 			}
 		} else {
@@ -120,26 +127,28 @@ int changeEvent::writeChangeEvent(int setEventType,
 }
 int changeEvent::changeOperation(__u16 inputEventType) {
     int retValue = -1;
-    // Press 0x00D9 -> Press mouse button 10
+    // Press 0x00D9 -> Press mouse button 12
     retValue = writeChangeEvent(inputEventType, outEvent, 1);
 
     if (-1 == retValue) {
 		debugPrint("changeEvent::changeOperation checkpoint 1 error");
 	} else {
         retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
-    	// Release the key To prevent key repeat
-    	if (-1 == retValue) {
-			debugPrint("changeEvent::changeOperation checkpoint 2 error");
-		} else {
-    	    retValue = writeChangeEvent(inputEventType, outEvent, 0);
-    		if (-1 == retValue) {
-				debugPrint("changeEvent::changeOperation checkpoint 3 error");
-			} else {
-    		    retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
-    		}
-    	}
-		
-    }
+	}
+   	// Release the key To prevent key repeat
+   	if (-1 == retValue) {
+		debugPrint("changeEvent::changeOperation checkpoint 2 error");
+	} else {
+   	    retValue = writeChangeEvent(inputEventType, outEvent, 0);
+	}
+   	if (-1 == retValue) {
+		debugPrint("changeEvent::changeOperation checkpoint 3 error");
+	} else {
+   	    retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
+   	}
+	if (-1 == retValue) {
+		debugPrint("changeEvent::changeOperation checkpoint 4 error");
+	}
     return retValue;
 
 }
@@ -164,11 +173,11 @@ int changeEvent::createOutputDevice(int createFd, const char *pInputDevName) {
 		retValue = write(createFd, &newDevice, sizeof(newDevice));
 		if (retValue >= 0) {
 			retValue = ioctl(createFd, UI_DEV_CREATE);
-			if (retValue < 0) {
-				debugPrint("changeEvent::createOutputDevice ioctl error");
-			}
 		} else {
 			debugPrint("changeEvent::createOutputDevice write error");
+		}
+		if (retValue < 0) {
+			debugPrint("changeEvent::createOutputDevice ioctl error");
 		}
 	} else {
 		tracePrint("changeEvent::nullpointer");
@@ -186,7 +195,8 @@ int changeEvent::searchDeviceList(char *pDeviceName, struct input_id &pInputId) 
         retValue = strncmp(pDeviceName, 
 						   targetDevNameTable[loopCnt].pTargetDeviceName,
 						   checkLen);
-		if ((0 == retValue) && (pInputId.product == targetDevNameTable[loopCnt].detailDeviceType)){
+		if ((0 == retValue) &&
+			(pInputId.product == targetDevNameTable[loopCnt].detailDeviceType)){
 			cout <<"match device name = "<< pDeviceName << endl;
 			cout <<" device.product = " << hex << pInputId.product << endl;
 			targetEvent = targetDevNameTable[loopCnt].targetOpeNum;

@@ -6,7 +6,6 @@
 #include "changeEvent.hpp"
 #include "debug.hpp"
 
-//const char devInputDir[] = "/dev/input";
 
 int main(void) {
 	int retValue = -1;
@@ -15,7 +14,7 @@ int main(void) {
 	int chgEvtCnt = 0;
     struct dirent **ppNameList;
 	
-    devNum = scandir(DEV_INPUT_DIR, &ppNameList, checkEventDevice, versionsort);
+    devNum = scandir(devInputDir, &ppNameList, checkEventDevice, versionsort);
 
     if (0 < devNum) {
 		changeEvent *pChgEvt[devNum];
