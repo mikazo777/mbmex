@@ -11,4 +11,5 @@ const int MX_5500 = 0xc71c;
 const int VX_REVOLUTION = 0xc51a;
 const int MX_MASTER2S_KEYBOARD = 0xb019;
 const int G700_G700S = 0xc531;
+const int UNKOWN_MOUSE = 0xFFFF;
 #endif // LOGITECH_MOUSE_PRODUCT_HPP

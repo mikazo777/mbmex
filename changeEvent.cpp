@@ -20,7 +20,7 @@ TARGET_TBL_T targetDevNameTable[] = {
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x001D, BTN_TASK },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x000F, 0x0000 },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x0038, 0x0000 },
-	{ nullptr, 0x0000, 0x0000 }
+	{ nullptr, UNKOWN_MOUSE, 0x0000, 0x0000 }
 };
 
 changeEvent::changeEvent(const char *pInputPath) {
@@ -196,12 +196,3 @@ int changeEvent::searchDeviceList(char *pDeviceName, struct input_id &pInputId) 
     }
     return retValue;
 }
-#if 0
-int checkEventDevice(const struct dirent *pDir) {
-    int retValue = 0;
-    if (0 == (strncmp("event", pDir->d_name, 5))) {
-        retValue = 1;
-    }
-    return retValue;
-}
-#endif
