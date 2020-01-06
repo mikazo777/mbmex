@@ -6,7 +6,7 @@
 #include "changeEvent.hpp"
 #include "debug.hpp"
 
-const char devInputDir[] = "/dev/input";
+//const char devInputDir[] = "/dev/input";
 
 int main(void) {
 	int retValue = -1;
