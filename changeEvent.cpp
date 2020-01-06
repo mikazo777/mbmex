@@ -16,6 +16,7 @@ TARGET_TBL_T targetDevNameTable[] = {
 	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_4, 0x00D9, BTN_TASK },
 	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_5, 0x00D9, BTN_TASK },
 	{ "Logitech USB Receiver Consumer Control", MX_5500, 0x00D9, BTN_TASK },
+	{ "Logitech USB Receiver Consumer Control", VX_REVOLUTION, 0x00D9, BTN_TASK },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x001D, BTN_TASK },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x000F, 0x0000 },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x0038, 0x0000 },
