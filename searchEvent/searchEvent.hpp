@@ -23,6 +23,7 @@ public:
 	};
 protected:
     int inputFd;        // input fd
+	struct input_id inputId;
 	char deviceName[UINPUT_MAX_NAME_SIZE];
 
 };
