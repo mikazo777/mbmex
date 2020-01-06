@@ -44,7 +44,7 @@ private:
 	struct input_id inputId;
 
     int createOutputDevice(int createFd, const char *pInputDevName);
-    int changeOperation(__u16 inputEventType);
+    int changeOperation(__u16 inputEventType, int inputEventValue);
     int writeChangeEvent(int setEventType, int eventCode, int setValue);
 };
 //int checkEventDevice(const struct dirent *pDir);

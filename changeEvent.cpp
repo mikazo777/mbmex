@@ -94,10 +94,8 @@ int changeEvent::changeEventTask(void) {
 		} else if (readResult != sizeof(inputEvent)) {
 			printf("size error readResult = %d", readResult);
 			break;
-		} else if ((EV_KEY == inputEvent.type) && 
-				(targetEvent == inputEvent.code) && 
-				(1 == inputEvent.value)) {
-			readResult = changeOperation(inputEvent.type);
+		} else if ((EV_KEY == inputEvent.type) && (targetEvent == inputEvent.code)) {
+			readResult = changeOperation(inputEvent.type, inputEvent.value);
 			if (-1 == readResult) {
 				break;
 			}
@@ -125,29 +123,18 @@ int changeEvent::writeChangeEvent(int setEventType,
 	writeEvent.time.tv_sec = 0;
 	return write(outputFd, &writeEvent, sizeof(writeEvent));
 }
-int changeEvent::changeOperation(__u16 inputEventType) {
+int changeEvent::changeOperation(__u16 inputEventType, int inputEventValue) {
     int retValue = -1;
     // Press 0x00D9 -> Press mouse button 12
-    retValue = writeChangeEvent(inputEventType, outEvent, 1);
+    retValue = writeChangeEvent(inputEventType, outEvent, inputEventValue);
 
     if (-1 == retValue) {
 		debugPrint("changeEvent::changeOperation checkpoint 1 error");
 	} else {
         retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
 	}
-   	// Release the key To prevent key repeat
-   	if (-1 == retValue) {
-		debugPrint("changeEvent::changeOperation checkpoint 2 error");
-	} else {
-   	    retValue = writeChangeEvent(inputEventType, outEvent, 0);
-	}
-   	if (-1 == retValue) {
-		debugPrint("changeEvent::changeOperation checkpoint 3 error");
-	} else {
-   	    retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
-   	}
 	if (-1 == retValue) {
-		debugPrint("changeEvent::changeOperation checkpoint 4 error");
+		debugPrint("changeEvent::changeOperation checkpoint 2 error");
 	}
     return retValue;
 
