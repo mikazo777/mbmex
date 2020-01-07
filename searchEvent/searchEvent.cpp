@@ -26,6 +26,7 @@ searchEvent::searchEvent(const char *pInputPath) {
 			debugPrint("ioctl error EVIOCGNAME");
 		}
 		if (0 <= retValue){ 
+			inputPath = pInputPath;
 			searchEventSts = true;
 		} else {
 			retValue = close(inputFd);
@@ -60,6 +61,7 @@ int searchEvent::eventTask(void) {
         } else if ((EV_KEY == event.type) &&
                 (event.value == 1)) {
 			cout << "----------------------" << endl;
+			cout << "inputPath -> " << inputPath << endl;
         	cout << "deviceName-> " << endl;
 			cout << deviceName << endl;
 			cout << "deviceVendor->" << endl;
