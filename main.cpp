@@ -37,14 +37,18 @@ int main(void) {
 				}
 			}
         }
-		pthread_t handle;  // Thread handle
-		for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
-			retValue = pthread_create(&handle,
-									  nullptr,
-									  changeEvent::planchThread,
-									  pChgEvt[lpCnt]);
+		if (0 < chgEvtCnt) {
+			pthread_t handle;  // Thread handle
+			for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
+				retValue = pthread_create(&handle,
+										  nullptr,
+										  changeEvent::planchThread,
+										  pChgEvt[lpCnt]);
+			}
+			pthread_join(handle, nullptr);
+		} else {
+			debugPrint("Device not found");
 		}
-		pthread_join(handle, nullptr);
 	}
 	return retValue;
 }
