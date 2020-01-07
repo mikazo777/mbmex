@@ -3,6 +3,7 @@
 #include <string.h>
 #include <linux/input.h>
 #include <pthread.h>
+#include <sched.h>
 #include "logitechMouseProduct.hpp"
 #include "changeEvent.hpp"
 using namespace std;
@@ -84,18 +85,29 @@ changeEvent::~changeEvent() {
 int changeEvent::changeEventTask(void) {
 	int readResult = -1;
     struct input_event inputEvent;
+	__u16 inputEventCode;
 
 	cout << "DeviceName = " << deviceName << endl;
 	while(true) {
+		cout << "debug checkpoint 1" << endl;
 		readResult = read(inputFd, &inputEvent, sizeof(inputEvent));
 		if (-1 == readResult) {
 			debugPrint("read error do stop");
-			break;
+			//break;
 		} else if (readResult != sizeof(inputEvent)) {
 			printf("size error readResult = %d", readResult);
 			break;
-		} else if ((EV_KEY == inputEvent.type) && (targetEvent == inputEvent.code)) {
-			readResult = changeOperation(inputEvent.type, inputEvent.value);
+		} else if ((EV_KEY == inputEvent.type) ||
+				   (EV_REL == inputEvent.type) ||
+				   (EV_MSC == inputEvent.type) ||
+				   (EV_SYN == inputEvent.type)) {
+			if ((EV_KEY == inputEvent.type) && (targetEvent == inputEvent.code)) {
+				inputEventCode = outEvent;				
+			} else {
+				inputEventCode = inputEvent.code;
+			}
+			readResult = writeChangeEvent(inputEvent.type, inputEventCode, inputEvent.value);
+			cout << "debug checkpoint 2" << endl;
 			if (-1 == readResult) {
 				break;
 			}
@@ -108,6 +120,10 @@ int changeEvent::changeEventTask(void) {
 			cout << "inputEvent.value = " << inputEvent.value << endl;
 #endif // MBMEX_DEBUG_ON
 		}
+		if (-1 == sched_yield()) {
+			break;
+		}
+		cout << "debug checkpoint 3" << endl;
 	}
 	changeEventSts = false;
 	return readResult;
@@ -123,15 +139,18 @@ int changeEvent::writeChangeEvent(int setEventType,
 	writeEvent.time.tv_sec = 0;
 	return write(outputFd, &writeEvent, sizeof(writeEvent));
 }
-int changeEvent::changeOperation(__u16 inputEventType, int inputEventValue) {
+int changeEvent::changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue) {
     int retValue = -1;
     // Press 0x00D9 -> Press mouse button 12
-    retValue = writeChangeEvent(inputEventType, outEvent, inputEventValue);
+    retValue = writeChangeEvent(inputEventType, inputEventCode, inputEventValue);
+	cout << "inputEvent.type = " << inputEventType << endl;
+	cout << "inputEvent.code = " << inputEventCode << endl;
+	cout << "inputEvent.value = " << inputEventValue << endl;
 
     if (-1 == retValue) {
 		debugPrint("changeEvent::changeOperation checkpoint 1 error");
 	} else {
-        retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
+//		retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
 	}
 	if (-1 == retValue) {
 		debugPrint("changeEvent::changeOperation checkpoint 2 error");
