@@ -123,6 +123,7 @@ int changeEvent::writeChangeEvent(int setEventType,
 	writeEvent.code = eventCode;
 	writeEvent.value = setValue;
 	writeEvent.time.tv_sec = 0;
+	writeEvent.time.tv_usec = 0;
 	return write(outputFd, &writeEvent, sizeof(writeEvent));
 }
 int changeEvent::changeOperation(__u16 inputEventType) {
