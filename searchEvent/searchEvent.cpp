@@ -87,7 +87,7 @@ int main(void) {
     int searchEvtCnt = 0;
     struct dirent **ppNameList;
 
-    devNum = scandir(DEV_INPUT_DIR, &ppNameList, checkEventDevice, versionsort);
+    devNum = scandir(devInputDir, &ppNameList, checkEventDevice, versionsort);
 
     if (0 < devNum) {
         searchEvent *pSearchEvt[devNum];
