@@ -1,7 +1,5 @@
-#include <dirent.h>
 #include <cstring>
 #include "mbmexBase.hpp"
-#include "debug.hpp"
 
 int checkEventDevice(const struct dirent *pDir) {
     int retValue = 0;

@@ -1,11 +1,11 @@
 #include <error.h>
-#include <iostream>
 #include <string.h>
 #include <linux/input.h>
 #include <pthread.h>
 #include <sched.h>
 #include "logitechMouseProduct.hpp"
 #include "changeEvent.hpp"
+#include "debug.hpp"
 using namespace std;
 
 TARGET_TBL_T targetDevNameTable[] = {

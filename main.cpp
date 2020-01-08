@@ -1,8 +1,6 @@
-#include <dirent.h>
 #include <cstring>
 #include <pthread.h>
 #include <unistd.h>
-#include "main.hpp"
 #include "mbmexBase.hpp"
 #include "changeEvent.hpp"
 #include "debug.hpp"

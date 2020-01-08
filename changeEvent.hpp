@@ -1,6 +1,5 @@
 #ifndef CHANGE_EVENT_HPP
 #define CHANGE_EVENT_HPP
-#include <errno.h>
 #include <fcntl.h>
 #include <linux/input.h>
 #include <linux/uinput.h>
@@ -10,7 +9,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "debug.hpp"
 
 
 #define UINPUTPATH "/dev/uinput"
@@ -47,5 +45,4 @@ private:
     int changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue);
     int writeChangeEvent(int setEventType, int eventCode, int setValue);
 };
-//int checkEventDevice(const struct dirent *pDir);
 #endif //CHANGE_EVENT_HPP
