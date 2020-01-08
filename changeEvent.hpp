@@ -38,13 +38,13 @@ private:
     int targetEvent;    // target change event num
     int inputFd;        // input fd
     int outputFd;       // output fd
-    int outEvent;       // change event num
+    __u16 outEvent;       // change event num
     int createOutputDvRet;  // 
 	char deviceName[UINPUT_MAX_NAME_SIZE];
 	struct input_id inputId;
 
     int createOutputDevice(int createFd, const char *pInputDevName);
-    int changeOperation(__u16 inputEventType);
+    int changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue);
     int writeChangeEvent(int setEventType, int eventCode, int setValue);
 };
 //int checkEventDevice(const struct dirent *pDir);

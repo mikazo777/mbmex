@@ -5,6 +5,7 @@
 #include <linux/input.h>
 #include <pthread.h>
 #include "searchEvent.hpp"
+#include "../mbmexBase.hpp"
 using namespace std;
 
 searchEvent::searchEvent(const char *pInputPath) {
@@ -58,8 +59,7 @@ int searchEvent::eventTask(void) {
         } else if (readResult != sizeof(event)) {
             printf("size error readResult = %d", readResult);
             break;
-        } else if ((EV_KEY == event.type) &&
-                (event.value == 1)) {
+		} else if (EV_KEY == event.type) {
 			cout << "----------------------" << endl;
 			cout << "inputPath -> " << inputPath << endl;
         	cout << "deviceName-> " << endl;
@@ -72,6 +72,8 @@ int searchEvent::eventTask(void) {
 			cout << "0x" << hex << event.type << endl;
         	cout << "InputEvent.code->" << endl;
 			cout << "0x" << hex << event.code << endl;
+			cout << "InputEvent.value->" << endl;
+			cout << "0x" << hex << event.value << endl;
 			cout << "----------------------" << endl;
         	fflush(stdout);
 		} else {
