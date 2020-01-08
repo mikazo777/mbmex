@@ -50,7 +50,6 @@ changeEvent::changeEvent(const char *pInputPath) {
 			tracePrint("Target DeviceName was not found");
 		}
 		if (-1 != outputFd) {
-			//outEvent = changeEventNum;
 			createOutputDvRet = createOutputDevice(outputFd, 
 												   deviceName);
 			ioctl(inputFd, EVIOCGRAB, 1);
