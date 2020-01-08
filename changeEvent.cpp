@@ -14,7 +14,7 @@ TARGET_TBL_T targetDevNameTable[] = {
 	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_3, 0x00D9, BTN_TASK },
 	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_4, 0x00D9, BTN_TASK },
 	{ "Logitech USB Receiver Consumer Control", MX_REVOLUTION_5, 0x00D9, BTN_TASK },
-	{ "Logitech USB Receiver Consumer Control", MX_5500, 0x00D9, BTN_TASK },
+	{ "Logitech MX Revolution Mouse Consumer Control", MX_REVOLUTION_5, 0x00D9, BTN_TASK },
 	{ "Logitech USB Receiver Consumer Control", VX_REVOLUTION, 0x00D9, BTN_TASK },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x001D, BTN_TASK },
 	{ "MX Master 2S Keyboard", MX_MASTER2S_KEYBOARD, 0x000F, 0x0000 },
@@ -137,6 +137,7 @@ int changeEvent::writeChangeEvent(int setEventType,
 	writeEvent.code = eventCode;
 	writeEvent.value = setValue;
 	writeEvent.time.tv_sec = 0;
+	writeEvent.time.tv_usec = 0;
 	return write(outputFd, &writeEvent, sizeof(writeEvent));
 }
 int changeEvent::changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue) {
