@@ -37,8 +37,10 @@ int main(void) {
 				}
 			}
 			if (0 < chgEvtCnt) {
+				cout << "chgEvtCnt =" << chgEvtCnt << endl;
 				pthread_t handle;  // Thread handle
 				for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
+					cout << "thread pChgEvt = " << pChgEvt[lpCnt] << endl;
 					retValue = pthread_create(&handle,
 											  nullptr,
 											  changeEvent::planchThread,

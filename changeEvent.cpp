@@ -22,7 +22,7 @@ TARGET_TBL_T targetDevNameTable[] = {
 	{ nullptr, UNKOWN_MOUSE, 0x0000, 0x0000 }
 };
 
-changeEvent::changeEvent(const char *pInputPath) {
+changeEvent::changeEvent(const char *pInputPath) : changeEventSts(false){
 	tracePrint("changeEvent::changeEvent start");
 	int retValue = -1;
 	outputFd = -1;
@@ -52,8 +52,9 @@ changeEvent::changeEvent(const char *pInputPath) {
 		if (-1 != outputFd) {
 			createOutputDvRet = createOutputDevice(outputFd, 
 												   deviceName);
-			ioctl(inputFd, EVIOCGRAB, 1);
 			if (createOutputDvRet != -1) {
+				cout << "checpoint EVIOCGRAB" << endl;
+				ioctl(inputFd, EVIOCGRAB, 1);
 				changeEventSts = true;
 			} else {
 				close(outputFd);
@@ -69,6 +70,7 @@ changeEvent::changeEvent(const char *pInputPath) {
 	if (false == changeEventSts) {
 #ifdef MBMEX_DEBUG_ON
 		cout << "pInputPath = " << pInputPath << endl;
+		cout << "DeviceName = " << deviceName << endl;
 		cout << "inputFd =" << inputFd << endl;
 		cout << "outputFd =" << outputFd << endl;
 		cout << "createOutputDvRet =" << createOutputDvRet << endl;
@@ -86,13 +88,11 @@ int changeEvent::changeEventTask(void) {
     struct input_event inputEvent;
 	__u16 inputEventCode;
 
-	cout << "DeviceName = " << deviceName << endl;
 	while(true) {
-		cout << "debug checkpoint 1" << endl;
 		readResult = read(inputFd, &inputEvent, sizeof(inputEvent));
 		if (-1 == readResult) {
 			debugPrint("read error do stop");
-			//break;
+			break;
 		} else if (readResult != sizeof(inputEvent)) {
 			printf("size error readResult = %d", readResult);
 			break;
@@ -106,7 +106,6 @@ int changeEvent::changeEventTask(void) {
 				inputEventCode = inputEvent.code;
 			}
 			readResult = writeChangeEvent(inputEvent.type, inputEventCode, inputEvent.value);
-			cout << "debug checkpoint 2" << endl;
 			if (-1 == readResult) {
 				break;
 			}
@@ -122,7 +121,6 @@ int changeEvent::changeEventTask(void) {
 		if (-1 == sched_yield()) {
 			break;
 		}
-		cout << "debug checkpoint 3" << endl;
 	}
 	changeEventSts = false;
 	return readResult;
