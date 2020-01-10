@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 project(mbmex CXX)
 
 # set parameters
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "-O2 -std=c++11 -Wall")
 set(SOURCES
 	mbmexBase.cpp
 	main.cpp
