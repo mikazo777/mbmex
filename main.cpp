@@ -1,6 +1,7 @@
 #include <cstring>
 #include <pthread.h>
 #include <unistd.h>
+#include <thread>
 #include "mbmexBase.hpp"
 #include "changeEvent.hpp"
 #include "debug.hpp"
@@ -37,17 +38,14 @@ int main(void) {
 				}
 			}
 			if (0 < chgEvtCnt) {
-				cout << "chgEvtCnt =" << chgEvtCnt << endl;
-				pthread_t handle;  // Thread handle
+				thread changeEventThreads[chgEvtCnt];
 				for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
-					cout << "thread pChgEvt = " << pChgEvt[lpCnt] << endl;
-					retValue = pthread_create(&handle,
-											  nullptr,
-											  changeEvent::planchThread,
-											  pChgEvt[lpCnt]);
+					changeEventThreads[lpCnt] = thread(changeEvent::planchThread,
+													   pChgEvt[lpCnt]);
 				}
-				pthread_join(handle, nullptr);
-				break;
+				for (lpCnt = 0; lpCnt < chgEvtCnt; lpCnt++ ) {
+					changeEventThreads[lpCnt].join();
+				}
 			} else {
 				debugPrint("Device not found");
 				sleep(5);

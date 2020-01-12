@@ -19,7 +19,8 @@ public:
     int eventTask(void);
 	static void *planchThread(void *pParam) {
 	    reinterpret_cast<searchEvent*>(pParam)->eventTask();
-    	pthread_exit(NULL);
+		delete reinterpret_cast<searchEvent*>(pParam);
+		return NULL;
 	};
 protected:
     int inputFd;        // input fd

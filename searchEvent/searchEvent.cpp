@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string.h>
 #include <linux/input.h>
-#include <pthread.h>
+#include <thread>
 #include "searchEvent.hpp"
 #include "../mbmexBase.hpp"
 using namespace std;
@@ -114,14 +114,14 @@ int main(void) {
                 }
             }
         }
-        pthread_t handle;  // Thread handle
+		thread searchEvtThreads[searchEvtCnt];
         for (lpCnt = 0; lpCnt < searchEvtCnt; lpCnt++ ) {
-            retValue = pthread_create(&handle,
-                                      nullptr,
-                                      searchEvent::planchThread,
-                                      pSearchEvt[lpCnt]);
+			searchEvtThreads[lpCnt] = thread(searchEvent::planchThread,
+											 pSearchEvt[lpCnt]);
         }
-        pthread_join(handle, nullptr);
+        for (lpCnt = 0; lpCnt < searchEvtCnt; lpCnt++ ) {
+			searchEvtThreads[lpCnt].join();
+		}
     }
     return retValue;
 }
