@@ -5,6 +5,12 @@ SUBMENU_ARRAY=("Release" "Debug" "RelWithDebInfo" "MinSizeRel")
 build_main() {
 	BUILD_TYPE=$1
 	BUILD_PG_TYPE=$2
+	echo "-------------------------------"
+	echo "Select process"
+	echo "1. rm build directory and make"
+	echo "2. make only"
+	echo "q. quit"
+	read INPUT
 
 	if [ $BUILD_PG_TYPE = "1" ]; then
 		MOVE_DIR="$(pwd)"
@@ -12,10 +18,18 @@ build_main() {
 		MOVE_DIR="searchEvent"
 	fi
 	cd $MOVE_DIR
-	if [ -d build ]; then
-		rm -fr build
+	if [ $INPUT = "1" ]; then
+		if [ -d build ]; then
+			rm -fr build
+		fi
+		mkdir build
+	elif [ $INPUT = "2" ]; then
+		echo "build only"
+	elif [ $INPUT = "q" ]; then
+		exit 0
+	else
+		build_main $BUILD_TYPE $BUILD_PG_TYPE
 	fi
-	mkdir build
 	
 	cd build
 	cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ../
