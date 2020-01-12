@@ -30,7 +30,8 @@ public:
 	int searchDeviceList(char *pDeviceName, struct input_id &pInputId);
 	static void *planchThread(void *pParam) {
 	    reinterpret_cast<changeEvent*>(pParam)->changeEventTask();
-    	pthread_exit(NULL);
+		delete reinterpret_cast<changeEvent*>(pParam);
+		return NULL;
 	};
 private:
     int targetEvent;    // target change event num
