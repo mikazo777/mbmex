@@ -198,8 +198,8 @@ int changeEvent::searchDeviceList(char *pDeviceName, struct input_id &pInputId) 
 						   checkLen);
 		if ((0 == retValue) &&
 			(pInputId.product == targetDevNameTable[loopCnt].detailDeviceType)){
-			cout <<"match device name = "<< pDeviceName << endl;
-			cout <<" device.product = " << hex << pInputId.product << endl;
+			debugParamCharPrint("match device name", pDeviceName);
+			debugParamIntHexPrint("match device product", pInputId.product);
 			targetEvent = targetDevNameTable[loopCnt].targetOpeNum;
 			outEvent = targetDevNameTable[loopCnt].changeEventNum;
             break;

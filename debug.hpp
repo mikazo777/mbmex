@@ -25,4 +25,9 @@ void debugParamIntPrint(const char *pPrintMsg_1,
 						const char *pFile = __builtin_FILE(),
 						int lineNum = __builtin_LINE(),
 						const char *pFunc = __builtin_FUNCTION());
+void debugParamIntHexPrint(const char *pPrintMsg_1,
+						   const int paramInt,
+						   const char *pFile = __builtin_FILE(),
+						   int lineNum = __builtin_LINE(),
+						   const char *pFunc = __builtin_FUNCTION());
 #endif // DEBUG_HPP

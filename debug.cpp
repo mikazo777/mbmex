@@ -14,7 +14,7 @@ void tracePrint(const char *pPrintMsg,
 			    const int pLine,
 			    const char *pFunction) {
 #ifdef MBMEX_DEBUG_ON
-	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg <<  endl;
+	debugPrint(pPrintMsg, pFile, pLine, pFunction);
 #endif
 	return;
 }
@@ -35,6 +35,16 @@ void debugParamIntPrint(const char *pPrintMsg_1,
 						const char *pFunction) {
 #ifdef MBMEX_DEBUG_ON
 	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg_1 << "="<< paramInt <<  endl;
+#endif
+	return;
+}
+void debugParamIntHexPrint(const char *pPrintMsg_1,
+						const int paramInt,
+						const char *pFile,
+						const int pLine,
+						const char *pFunction) {
+#ifdef MBMEX_DEBUG_ON
+	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg_1 << "=0x" << hex << paramInt <<  endl;
 #endif
 	return;
 }
