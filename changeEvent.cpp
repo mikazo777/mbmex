@@ -134,25 +134,6 @@ int changeEvent::writeChangeEvent(int setEventType,
 	writeEvent.time.tv_usec = 0;
 	return write(outputFd, &writeEvent, sizeof(writeEvent));
 }
-int changeEvent::changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue) {
-    int retValue = -1;
-    // Press 0x00D9 -> Press mouse button 12
-    retValue = writeChangeEvent(inputEventType, inputEventCode, inputEventValue);
-	cout << "inputEvent.type = " << inputEventType << endl;
-	cout << "inputEvent.code = " << inputEventCode << endl;
-	cout << "inputEvent.value = " << inputEventValue << endl;
-
-    if (-1 == retValue) {
-		debugPrint("changeEvent::changeOperation checkpoint 1 error");
-	} else {
-//		retValue = writeChangeEvent(EV_SYN, SYN_REPORT, 0);
-	}
-	if (-1 == retValue) {
-		debugPrint("changeEvent::changeOperation checkpoint 2 error");
-	}
-    return retValue;
-
-}
 
 
 int changeEvent::createOutputDevice(int createFd, const char *pInputDevName) {

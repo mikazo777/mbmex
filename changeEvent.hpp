@@ -43,7 +43,6 @@ private:
 	struct input_id inputId;
 
     int createOutputDevice(int createFd, const char *pInputDevName);
-    int changeOperation(__u16 inputEventType, __u16 inputEventCode, __u16 inputEventValue);
     int writeChangeEvent(int setEventType, int eventCode, int setValue);
 };
 #endif //CHANGE_EVENT_HPP
