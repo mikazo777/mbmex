@@ -2,27 +2,39 @@
 #include <cstdio>
 using namespace std;
 
-void msgPrint(const char *pPrintMsg,
-			  const char *pFile,
-			  const int pLine,
-			  const char *pFunction) {
+void debugPrint(const char *pPrintMsg,
+			    const char *pFile,
+			    const int pLine,
+			    const char *pFunction) {
+	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg <<  endl;
+	return;
+}
+void tracePrint(const char *pPrintMsg,
+			    const char *pFile,
+			    const int pLine,
+			    const char *pFunction) {
 #ifdef MBMEX_DEBUG_ON
 	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg <<  endl;
 #endif
 	return;
 }
-void debugPrint(string str) {
+void debugParamCharPrint(const char *pPrintMsg_1,
+						 const char *pParamChar,
+						 const char *pFile,
+						 const int pLine,
+						 const char *pFunction) {
 #ifdef MBMEX_DEBUG_ON
-//	cout << "error no = " << errno << endl;
-	//mbmexDebug::msgPrint(__builtin_FILE(), __builtin_LINE());
-	
-	perror(str.c_str());
+	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg_1 << "="<< pParamChar <<  endl;
+#endif
 	return;
-#endif // MBMEX_DEBUG_ON
 }
-
-void tracePrint(string str) {
+void debugParamIntPrint(const char *pPrintMsg_1,
+						const int paramInt,
+						const char *pFile,
+						const int pLine,
+						const char *pFunction) {
 #ifdef MBMEX_DEBUG_ON
-	cout << str << endl;
-#endif // MBMEX_DEBUG_ON
+	cout << pFile << ":" << dec << pLine << ":" << pFunction << ":" << pPrintMsg_1 << "="<< paramInt <<  endl;
+#endif
+	return;
 }

@@ -27,7 +27,7 @@ int main(void) {
 						 devInputDir,
 						 (ppNameList[lpCnt])->d_name);
 
-				printf("filename = %s\n", filename);
+				debugParamCharPrint("filename", filename);
 				pChgEvt[chgEvtCnt] = new changeEvent(filename);
 				if (nullptr != pChgEvt[chgEvtCnt]) {
 					if (false == pChgEvt[chgEvtCnt]->changeEventSts) {

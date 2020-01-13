@@ -9,7 +9,7 @@
 using namespace std;
 
 searchEvent::searchEvent(const char *pInputPath) {
-	tracePrint("searchEvent::searchEvent start");
+	tracePrint("start");
 	int retValue = -1;
 	memset(deviceName, 0x00, sizeof(deviceName));
 	if (nullptr != pInputPath) {
@@ -35,12 +35,10 @@ searchEvent::searchEvent(const char *pInputPath) {
 		}
 	}
 	if (false == searchEventSts) {
-#ifdef MBMEX_DEBUG_ON
-		cout << "pInputPath = " << pInputPath << endl;
-		cout << "inputFd =" << inputFd << endl;
-#endif //MBMEX_DEBUG_ON
+		debugParamCharPrint("pInputPath", pInputPath);
+		debugParamIntPrint("inputFd", inputFd);
 	}
-	tracePrint("searchEvent::searchEvent end");
+	tracePrint("end");
 }
 searchEvent::~searchEvent() {
 	ioctl(inputFd, EVIOCGRAB, 0);
@@ -50,14 +48,14 @@ searchEvent::~searchEvent() {
 int searchEvent::eventTask(void) {
     int readResult = -1;
     struct input_event event;
-    cout << "searchEvent start" << endl;
+    tracePrint("start");
     while(true) {
 		readResult = read(inputFd, &event, sizeof(event));
         if (-1 == readResult) {
             debugPrint("read error do stop");
             break;
         } else if (readResult != sizeof(event)) {
-            printf("size error readResult = %d", readResult);
+			debugParamIntPrint("size error readResult", readResult);
             break;
 		} else if (EV_KEY == event.type) {
 			cout << "----------------------" << endl;
@@ -104,7 +102,7 @@ int main(void) {
                      devInputDir,
                      (ppNameList[lpCnt])->d_name);
 
-            printf("filename = %s\n", filename);
+			debugParamCharPrint("filename", filename);
             pSearchEvt[searchEvtCnt] = new searchEvent(filename);
             if (nullptr != pSearchEvt[searchEvtCnt]) {
                 if (false == pSearchEvt[searchEvtCnt]->searchEventSts) {

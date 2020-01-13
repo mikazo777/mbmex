@@ -23,6 +23,7 @@ TARGET_TBL_T targetDevNameTable[] = {
 };
 
 changeEvent::changeEvent(const char *pInputPath) : changeEventSts(false){
+	debugPrint("start");
 	tracePrint("changeEvent::changeEvent start");
 	int retValue = -1;
 	outputFd = -1;
@@ -53,7 +54,7 @@ changeEvent::changeEvent(const char *pInputPath) : changeEventSts(false){
 			createOutputDvRet = createOutputDevice(outputFd, 
 												   deviceName);
 			if (createOutputDvRet != -1) {
-				cout << "checpoint EVIOCGRAB" << endl;
+				tracePrint("checpoint EVIOCGRAB");
 				ioctl(inputFd, EVIOCGRAB, 1);
 				changeEventSts = true;
 			} else {
@@ -68,13 +69,11 @@ changeEvent::changeEvent(const char *pInputPath) : changeEventSts(false){
 		debugPrint("pInputPath = nullptr");
 	}
 	if (false == changeEventSts) {
-#ifdef MBMEX_DEBUG_ON
-		cout << "pInputPath = " << pInputPath << endl;
-		cout << "DeviceName = " << deviceName << endl;
-		cout << "inputFd =" << inputFd << endl;
-		cout << "outputFd =" << outputFd << endl;
-		cout << "createOutputDvRet =" << createOutputDvRet << endl;
-#endif //MBMEX_DEBUG_ON
+		debugParamCharPrint("InputPath", pInputPath);
+		debugParamCharPrint("DeviceName", deviceName);
+		debugParamIntPrint("InputFd", inputFd);
+		debugParamIntPrint("OutputFd", outputFd);
+		debugParamIntPrint("createOutputDvRet", createOutputDvRet);
 	}
 	tracePrint("changeEvent::changeEvent end");
 }
@@ -110,13 +109,11 @@ int changeEvent::changeEventTask(void) {
 				break;
 			}
 		} else {
-#ifdef MBMEX_DEBUG_ON
-			cout << "skip.Because" << endl;
-			cout << "EV_KEY = " << EV_KEY << endl;
-			cout << "targetEvent = " << targetEvent << endl;
-			cout << "inputEvent.code = " << inputEvent.code << endl;
-			cout << "inputEvent.value = " << inputEvent.value << endl;
-#endif // MBMEX_DEBUG_ON
+			debugPrint("skip.Because");
+			debugParamIntPrint("EV_KEY",EV_KEY);
+			debugParamIntPrint("targetEvent",targetEvent);
+			debugParamIntPrint("inputEvent.code",inputEvent.code);
+			debugParamIntPrint("inputEvent.value",inputEvent.value);
 		}
 		if (-1 == sched_yield()) {
 			break;
