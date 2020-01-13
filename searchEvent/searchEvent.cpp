@@ -4,9 +4,17 @@
 #include <string.h>
 #include <linux/input.h>
 #include <thread>
+#include <csignal>
 #include "searchEvent.hpp"
 #include "../mbmexBase.hpp"
 using namespace std;
+bool searchEventSignalStatus;
+static void signalHandler(int signalNum) {
+	searchEventSignalStatus = true;
+}
+bool getSignalStatus(void) {
+	return searchEventSignalStatus;
+}
 
 searchEvent::searchEvent(const char *pInputPath) {
 	tracePrint("start");
@@ -50,6 +58,9 @@ int searchEvent::eventTask(void) {
     struct input_event event;
     tracePrint("start");
     while(true) {
+		if ( true == getSignalStatus()) {
+			break;
+		}
 		readResult = read(inputFd, &event, sizeof(event));
         if (-1 == readResult) {
             debugPrint("read error do stop");
@@ -58,6 +69,7 @@ int searchEvent::eventTask(void) {
 			debugParamIntPrint("size error readResult", readResult);
             break;
 		} else if (EV_KEY == event.type) {
+			cout << this << endl;
 			cout << "----------------------" << endl;
 			cout << "inputPath -> " << inputPath << endl;
         	cout << "deviceName-> " << endl;
@@ -78,7 +90,6 @@ int searchEvent::eventTask(void) {
 			;
 		}
     }
-    close(inputFd);
 	return readResult;
 }
 
@@ -86,8 +97,12 @@ int main(void) {
     int retValue = -1;
     int devNum = 0;
     int lpCnt = 0;
-    int searchEvtCnt = 0;
-    struct dirent **ppNameList;
+	int searchEvtCnt = 0;
+	struct dirent **ppNameList;
+	searchEventSignalStatus = false;
+	signal(SIGINT, signalHandler);
+	signal(SIGTERM, signalHandler);
+	signal(SIGKILL, signalHandler);
 
     devNum = scandir(devInputDir, &ppNameList, checkEventDevice, versionsort);
 
