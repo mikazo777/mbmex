@@ -16,3 +16,7 @@ $ sudo make install
 
 # start program
 $ ./start_mbmex.sh
+
+# searchEvent
+SearchEvent is purpose to find devicename and button number.
+You can add the devicename and button number to logitechMouseProduct.hpp.
