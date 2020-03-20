@@ -1,3 +1,4 @@
+All named products and descriptions are trademarks and/or registered trademarks of the respective manufacturers and are accepted as protected
 # mbmex
 This repository is program of many button mouse extended.
 
