@@ -2,8 +2,6 @@ All named products and descriptions are trademarks and/or registered trademarks 
 # mbmex
 This repository is program of many button mouse extended.
 
-# process
-
 # build
 
 ```
