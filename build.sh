@@ -25,6 +25,7 @@ build_main() {
 		mkdir build
 	elif [ $INPUT = "2" ]; then
 		echo "build only"
+		mkdir build
 	elif [ $INPUT = "q" ]; then
 		exit 0
 	else
