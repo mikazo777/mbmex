@@ -142,8 +142,23 @@ int changeEvent::createOutputDevice(int createFd, const char *pInputDevName) {
 	errno = 0;
 	tracePrint("changeEvent::createOutputDevice start");
 	if (nullptr != pInputDevName) {
+		ioctl(createFd, UI_SET_EVBIT, EV_REL);
+		ioctl(createFd, UI_SET_RELBIT, REL_X);
+		ioctl(createFd, UI_SET_RELBIT, REL_Y);
+		ioctl(createFd, UI_SET_RELBIT, REL_WHEEL);
 		ioctl(createFd, UI_SET_EVBIT, EV_KEY);
-		ioctl(createFd, UI_SET_KEYBIT, outEvent);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_LEFT);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_RIGHT);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_MIDDLE);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_SIDE);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_EXTRA);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_FORWARD);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_BACK);
+		ioctl(createFd, UI_SET_KEYBIT, BTN_TASK);
+		ioctl(createFd, UI_SET_KEYBIT, 0x0118);
+		ioctl(createFd, UI_SET_KEYBIT, 0x011A);
+		ioctl(createFd, UI_SET_KEYBIT, 0x011B);
+		ioctl(createFd, UI_SET_KEYBIT, 0x011C);
 
 		size_t inputDevLen = strnlen(pInputDevName, UINPUT_MAX_NAME_SIZE);
 		strncpy(newDevice.name, pInputDevName, inputDevLen);
